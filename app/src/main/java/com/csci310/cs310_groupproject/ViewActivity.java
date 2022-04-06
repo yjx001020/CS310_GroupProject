@@ -282,12 +282,14 @@ public class ViewActivity extends AppCompatActivity {
         int index = 0;
         for(int i = 0; i < at.size(); i++){
             Date temp = at.get(i);
+            System.out.println(temp);
             int count = 0;
             for(int j = 0; j < at.size(); j++){
-                if(temp == at.get(i)){
+                if(temp.toString().equals(at.get(j).toString())){
                     count++;
                 }
             }
+            System.out.println(count);
             if(count > max){
                 max = count;
                 index = i;
