@@ -82,6 +82,7 @@ public class ViewActivity extends AppCompatActivity {
         InfoAsyncTask connectMySql = new InfoAsyncTask();
         connectMySql.execute("");
 
+
         btnFetch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +122,6 @@ public class ViewActivity extends AppCompatActivity {
                 di = i2-i;
                 getmode co = new getmode();
                 co.execute();
-
             }
         });
         btnsign.setOnClickListener(new View.OnClickListener() {
@@ -266,13 +266,33 @@ public class ViewActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result){
+            Date re = Getmost();
             System.out.println(idd);
             if (di > 0) {
                 tx1.setText("Undecided!");
             }else{
-                tx1.setText(at.get(0).toString());
+                tx1.setText(re.toString());
             }
         }
 
+    }
+    public Date Getmost(){
+        String result;
+        int max = 0;
+        int index = 0;
+        for(int i = 0; i < at.size(); i++){
+            Date temp = at.get(i);
+            int count = 0;
+            for(int j = 0; j < at.size(); j++){
+                if(temp == at.get(i)){
+                    count++;
+                }
+            }
+            if(count > max){
+                max = count;
+                index = i;
+            }
+        }
+        return at.get(index);
     }
 }
