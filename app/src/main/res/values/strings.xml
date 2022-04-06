@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">CS310_GroupProject</string>
+    <string name="changeview">View in List</string>
+    <string name="mapview">View in Map</string>
+    <string name="eventname1">Study Group</string>
+    <string name="eventname2">Small Event</string>
+    <string name="eventname3">Social Activity</string>
+    <string name="eventname4">Others</string>
+    <string name="signup">Signup</string>
+    <string-array name="event_type_array">
+        <item>study group</item>
+        <item>social event</item>
+        <item>sports event</item>
+        <item>small event</item>
+    </string-array>
+    <string name="due_time_chosen"></string>
+    <string name="submit">SUBMIT</string>
+    <string name="event_type">Event Type</string>
+    <string name="other_info">Other Information</string>
+    <string name="enter_email">Enter email</string>
+    <string name="timeslots">Timeslots</string>
+    <string name="time">Choose Time</string>
+    <string name="date">Choose Date</string>
+    <string name="invite">Invite</string>
+    <string name="invite_people">Invite People</string>
+    <string name="due_time">Due Time</string>
+    <string name="timeslots_chosen"></string>
+    <string name="from">from</string>
+    <string name="to">to</string>
+    <string name="location">Location</string>
+    <string name="set_to_private">Set to Private Event</string>
+</resources>
