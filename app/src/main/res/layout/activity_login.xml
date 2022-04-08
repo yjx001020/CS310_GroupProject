@@ -22,13 +22,10 @@
         android:id="@+id/editTextTextPassword"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="77dp"
-        android:layout_marginBottom="400dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="18dp"
         android:ems="10"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
@@ -49,28 +46,21 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="398dp"
         android:text="Password:"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPassword"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
         android:id="@+id/buttonlog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginEnd="142dp"
-        android:layout_marginBottom="324dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="60dp"
         android:text="Log In"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
     <TextView
         android:id="@+id/warn"
