@@ -60,7 +60,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void goToEventHistory(View view) {
-        //TODO: need Event History class
         Intent i = new Intent(ProfileActivity.this, EventHistory.class);
         i.putExtra("email",email);
         startActivity(i);

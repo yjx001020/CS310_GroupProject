@@ -36,7 +36,6 @@ public class Login extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 email = et1.getText().toString();
                 password = et2.getText().toString();
                 Logadd connectMySql = new Logadd();
@@ -48,6 +47,7 @@ public class Login extends AppCompatActivity {
         String success = "";
         @Override
         protected String doInBackground(String...strings){
+            s = false;
             try{
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password=" + MainActivity.PASSWORD);
@@ -60,11 +60,12 @@ public class Login extends AppCompatActivity {
                     System.out.println(query);
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
-                    if(rs != null){
+                    if (rs.next()){
                         s = true;
                     }else{
                         s = false;
                     }
+                    System.out.println(s);
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
