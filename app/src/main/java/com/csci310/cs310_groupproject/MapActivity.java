@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,15 +39,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String[] loc;
     private Button goback;
     String email = "";
+    List<LatLng> all = new ArrayList<>();
+    static String newinput;
+    TextView tw;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         Intent data = getIntent();
+        tw = findViewById(R.id.textView12);
         String temp = data.getStringExtra("coord");
         email = data.getStringExtra("email");
         System.out.println(temp);
-        loc = temp.split(";");
+//        loc = temp.split(";");
+        all = processingloc(temp);
         goback = (Button) findViewById(R.id.button8);
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,16 +68,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        for(int i = 0; i< loc.length; i++){
-            int f = Integer.parseInt(loc[i].split(",")[0]);
-            int s = Integer.parseInt(loc[i].split(",")[1]);
-            LatLng sydney = new LatLng(f, s);
+        for(int i = 0; i< all.size(); i++){
             googleMap.addMarker(new MarkerOptions()
-                    .position(sydney)
+                    .position(all.get(i))
                     .title("Event in Map"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(all.get(i)));
         }
-
-
     }
+    static public List<LatLng> processingloc(String ss){
+        String [] tloc;
+        if(ss != null){
+            tloc = ss.split(";");
+        }else{
+            tloc = MapActivity.newinput.split(";");
+        }
+        List<LatLng> tt = new ArrayList<>();
+        for(int i = 0; i< tloc.length; i++) {
+            int f = Integer.parseInt(tloc[i].split(",")[0]);
+            int s = Integer.parseInt(tloc[i].split(",")[1]);
+            LatLng sydney = new LatLng(f, s);
+            tt.add(sydney);
+        }
+        return tt;
+    }
+
 }

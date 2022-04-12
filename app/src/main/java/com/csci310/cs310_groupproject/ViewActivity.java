@@ -2,15 +2,10 @@ package com.csci310.cs310_groupproject;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-
-import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -23,22 +18,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.content.Context;
+
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-
-import com.google.android.material.chip.Chip;
+import java.util.concurrent.ExecutionException;
 
 public class ViewActivity extends AppCompatActivity {
     private ListView listview;
@@ -52,14 +44,15 @@ public class ViewActivity extends AppCompatActivity {
     private Map<Integer, String> eventdetail;
     TextView textView;
     String information;
-    String idd;
+    static String idd;
     String allcoord = "";
     private String useremail;
     private String tt = "public";
-    TextView tx1;
-    List<Date> at;
-    long di;
+    static TextView tx1;
+    static List<Date> at = new ArrayList<>();
+    static long di;
     private Button btnprofile;
+    Connection conn = null;
 
 
 
@@ -70,6 +63,7 @@ public class ViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         Intent data = getIntent();
+
         useremail = data.getStringExtra("email");
         listview = (ListView) findViewById(R.id.eventlist);
         textView = (TextView) findViewById(R.id.detail);
@@ -121,9 +115,7 @@ public class ViewActivity extends AppCompatActivity {
                 long i2 = Long.parseLong(s2);
                 System.out.println(i);
                 di = i2-i;
-                getmode co = new getmode();
-                co.execute();
-
+                Callgetmode(conn, idd);
             }
         });
         btnsign.setOnClickListener(new View.OnClickListener() {
@@ -184,12 +176,7 @@ public class ViewActivity extends AppCompatActivity {
 
     public class InfoAsyncTask extends AsyncTask<String, Void, String> {
         String res = "";
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            Toast.makeText(ViewActivity.this, "Please wait...", Toast.LENGTH_SHORT)
-                    .show();
-        }
+        boolean success;
         @Override
         protected String doInBackground(String...strings) {
             try{
@@ -248,24 +235,48 @@ public class ViewActivity extends AppCompatActivity {
             listview.setAdapter(ADAhere);
         }
     }
+
+    public String Callgetmode(Connection cc, String id){
+        String re = null;
+        try {
+            getmode co = new getmode(cc, id);
+            co.execute();
+            re = co.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(re);
+        return re;
+    }
+
+
     public class getmode extends AsyncTask<String, Void, String> {
+        Connection conn;
+        String nid;
+        String result;
+        public getmode(Connection c, String s) {
+            this.conn = c;
+            this.nid = s;
+        }
         @Override
         protected String doInBackground(String... strings) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password=" + MainActivity.PASSWORD);
+                conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password=" + MainActivity.PASSWORD);
                 String result = "Database Connection Successful\n";
 
                 if (conn == null) {
-                    success = false;
                 } else {
                     Log.d("DATACONNECT", "connected");
-                    String query = "SELECT timeslots FROM Timeslots WHERE eventID = " + idd;
+                    String query = "SELECT timeslots FROM Timeslots WHERE eventID = " + nid;
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
                     at = new ArrayList<Date>();
                     while (rs.next()) {
                         at.add(rs.getDate("timeslots"));
+                        result += rs.getDate("timeslots").toString();
                     }
                 }
             } catch (SQLException throwables) {
@@ -273,17 +284,44 @@ public class ViewActivity extends AppCompatActivity {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            return "";
+            return result;
         }
         @Override
         protected void onPostExecute(String result){
+            System.out.println(at.size());
+            Date re = Getmost(at);
             System.out.println(idd);
             if (di > 0) {
                 tx1.setText("Undecided!");
             }else{
-                tx1.setText(at.get(0).toString());
+                tx1.setText(re.toString());
             }
         }
 
     }
+    static public Date Getmost(List<Date> at){
+        String result;
+        int max = 0;
+        int index = 0;
+        for(int i = 0; i < at.size(); i++){
+            Date temp = at.get(i);
+            System.out.println(temp);
+            int count = 0;
+            for(int j = 0; j < at.size(); j++){
+                if(temp.toString().equals(at.get(j).toString())){
+                    count++;
+                }
+            }
+            System.out.println(count);
+            if(count > max){
+                max = count;
+                index = i;
+            }
+        }
+        return at.get(index);
+    }
+    static TextView gettv(){
+        return tx1;
+    }
+
 }
