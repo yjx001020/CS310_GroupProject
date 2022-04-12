@@ -10,8 +10,6 @@ public class Event {
     String location;
     String description;// which class for study group,..
     String eventType; //study group, small event, social event, sports event
-    //other information specific for different types of event
-//    String eventInfo;
     String dueTime;
     List<String> proposedTimeslots;
     String timeDecided;
@@ -20,8 +18,7 @@ public class Event {
     List<String> peopleInvited; //by the event owner, select userID from invitations where eventID = ""
     List<String> peopleSignedUp; //people who signed up, select userID from invitations where eventID = "" and acceptStatus = 1
     List<String> participants;//peopleSignedUp who are available at the decided time slot
-/*    select userID from invitations join event on invitations.invitation_id = timeslots.invitation_id
-       where timeslot = "" and chosen = 1 and invitations.eventId = ""*/
+
 
     public Event(String eventType, String location, String timeslots, String dueTime, String description,
                  String invitedUserEmail, String accessType, String ownerID) {

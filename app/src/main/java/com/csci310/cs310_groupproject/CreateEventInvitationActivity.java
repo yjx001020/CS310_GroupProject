@@ -165,6 +165,9 @@ public class CreateEventInvitationActivity extends AppCompatActivity
                         eventId = rs.getInt(1);
                         System.out.println(eventId);
                     }
+                    System.out.println(timeslotsSubmit);
+                    System.out.println(dueTimeSubmit);
+                    System.out.println(invitedUserEmailSubmit);
 
                     Event event = new Event(eventTypeSubmit, locationSubmit, timeslotsSubmit, dueTimeSubmit,
                             descriptionSubmit, invitedUserEmailSubmit, accessTypeSubmit, ownerId);
