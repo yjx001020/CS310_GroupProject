@@ -23,4 +23,14 @@ public class EventTest extends TestCase {
         assertEquals("2022-4-11\t22:21:00", proposedTimeslots.get(0));
         assertEquals("2022-4-11\t20:21:00", proposedTimeslots.get(1));
     }
+
+    public void testFormatDate() {
+        assertEquals("2022-1-31", Event.formatDate(2022, 0, 31));
+        assertEquals("2022-4-1", Event.formatDate(2022, 3, 1));
+    }
+
+    public void testFormatTime() {
+        assertEquals("00:31:00", Event.formatTime(0, 31));
+        assertEquals("09:08:00", Event.formatTime(9, 8));
+    }
 }

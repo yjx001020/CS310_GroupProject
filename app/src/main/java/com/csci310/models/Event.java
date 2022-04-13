@@ -34,6 +34,19 @@ public class Event {
         this.ownerID = ownerID;
     }
 
+    public static String formatTime(int hourOfDay, int minute) {
+        String time= "";
+        if (hourOfDay < 10) {
+            time += "0";
+        }
+        time += String.format("%d:", hourOfDay);
+        if (minute < 10) {
+            time += "0";
+        }
+        time += String.format("%d:00", minute);
+        return time;
+    }
+
     public List<String> getPeopleInvited() {
         return peopleInvited;
     }
@@ -41,12 +54,11 @@ public class Event {
         return proposedTimeslots;
     }
 
+    public static String formatDate(int year, int month, int day) {
+        return String.format("%d-%d-%d", year, month+1, day);
+    }
     public List<String> showPublicEvents() {
         return new ArrayList<>();
-    }
-
-    public String viewDetail() {
-        return "";
     }
 
     public String determineEventTime() {

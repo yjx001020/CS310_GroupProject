@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 
 import com.csci310.models.Event;
 import com.csci310.models.Invitation;
+import com.csci310.models.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,7 +38,6 @@ import java.util.List;
 public class CreateEventInvitationActivity extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
-    //need owner id from the last activity
     String ownerId;
 
     int dateButtonClicked;
@@ -85,8 +85,8 @@ public class CreateEventInvitationActivity extends AppCompatActivity
                     msg = "failed";
                 } else {
                     Log.d("DATACONNECT", "connected");
-                    String query = "Select * from Users where email = " + "'" + email + "'";
-
+                    User user = new User();
+                    String query = user.getUserSQL(email);
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
                     while (rs.next()) {
@@ -225,6 +225,7 @@ public class CreateEventInvitationActivity extends AppCompatActivity
         i.putExtra("email", ownerId);
         startActivity(i);
     }
+
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
@@ -326,10 +327,10 @@ public class CreateEventInvitationActivity extends AppCompatActivity
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         if (dateButtonClicked == 0) {
             TextView timeSlotsChosenTextView = findViewById(R.id.timeSlotsChosenTextView);
-            timeSlotsChosenTextView.setText(String.format("%d-%d-%d", year, month+1, day));
+            timeSlotsChosenTextView.setText(Event.formatDate(year, month, day));
         } else {
             TextView dueTimeTextView = findViewById(R.id.dueTimeTextView);
-            dueTimeTextView.setText(String.format("%d-%d-%d", year, month+1, day) + "\t");
+            dueTimeTextView.setText(Event.formatDate(year, month, day) + "\t");
         }
     }
 
@@ -341,14 +342,7 @@ public class CreateEventInvitationActivity extends AppCompatActivity
         } else {
             timeChosenTextView = findViewById(R.id.dueTimeTextView);
         }
-        if (hourOfDay < 10) {
-            timeChosenTextView.append("0");
-        }
-        timeChosenTextView.append(String.format("%d:", hourOfDay));
-        if (minute < 10) {
-            timeChosenTextView.append("0");
-        }
-        timeChosenTextView.append(String.format("%d:00", minute));
+        timeChosenTextView.append(Event.formatTime(hourOfDay, minute));
     }
 
 
