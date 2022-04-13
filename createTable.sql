@@ -68,5 +68,5 @@ Insert into CS310Project.Timeslots (InvitationID, timeslots, chosen, eventID) va
 INSERT INTO `CS310Project`.`Invitation` (`InvitationID`, `userID`, `eventID`) VALUES ('5', 'trojan@usc.edu', '3');
 UPDATE `CS310Project`.`Invitation` SET `acceptStatus` = '1' WHERE (`InvitationID` = '5');
 INSERT INTO `CS310Project`.`Invitation` (`InvitationID`, `userID`, `eventID`) VALUES ('6', 'trojan@usc.edu', '1');
-
+UPDATE `CS310Project`.`Invitation` SET `acceptStatus` = '0' WHERE (`InvitationID` = '6');
 
