@@ -103,7 +103,7 @@ public class SignupActivity extends AppCompatActivity {
                     msg = "failed";
                 }else{
                     Log.d("DATACONNECT", "connected");
-                    String query = "SELECT timeslots FROM Timeslots WHERE eventID = " + idd;
+                    String query = "SELECT timeslots FROM Timeslots WHERE eventID = " + idd + " AND chosen = " + 0;
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
                     times = new ArrayList<String>();

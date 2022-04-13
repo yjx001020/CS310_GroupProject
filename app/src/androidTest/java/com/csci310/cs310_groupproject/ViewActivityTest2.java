@@ -6,9 +6,11 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
@@ -22,6 +24,7 @@ import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -31,14 +34,13 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class ViewActivityTest2 {
 
     @Rule
-    public ActivityScenarioRule<ViewActivity> mActivityTestRule = new ActivityScenarioRule(ViewActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void viewActivityTest2() {
@@ -72,16 +74,6 @@ public class ViewActivityTest2 {
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("hello123"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.editTextTextPassword), withText("hello123"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatEditText3.perform(click());
-
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.buttonlog), withText("Log In"),
                         childAtPosition(
@@ -107,8 +99,14 @@ public class ViewActivityTest2 {
                         childAtPosition(
                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                 3)))
-                .atPosition(0);
+                .atPosition(3);
         constraintLayout.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.timedecided), withText("Undecided!"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        textView.check(matches(withText("Undecided!")));
     }
 
     private static Matcher<View> childAtPosition(

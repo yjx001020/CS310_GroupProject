@@ -114,7 +114,8 @@ public class ViewActivity extends AppCompatActivity {
                 s2 = s2.replace(".", "");
                 long i2 = Long.parseLong(s2);
                 System.out.println(i);
-                di = i2-i;
+                System.out.println(i2);
+                di = i2-i/100;
                 Callgetmode(conn, idd);
             }
         });
