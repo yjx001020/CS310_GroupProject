@@ -69,4 +69,8 @@ INSERT INTO `CS310Project`.`Invitation` (`InvitationID`, `userID`, `eventID`) VA
 UPDATE `CS310Project`.`Invitation` SET `acceptStatus` = '1' WHERE (`InvitationID` = '5');
 INSERT INTO `CS310Project`.`Invitation` (`InvitationID`, `userID`, `eventID`) VALUES ('6', 'trojan@usc.edu', '1');
 UPDATE `CS310Project`.`Invitation` SET `acceptStatus` = '0' WHERE (`InvitationID` = '6');
+ALTER TABLE `CS310Project`.`Notification` 
+ADD COLUMN `id` INT NOT NULL AUTO_INCREMENT AFTER `message`,
+ADD PRIMARY KEY (`id`);
+INSERT INTO `CS310Project`.`Notification` (`email`, `owner`, `message`) VALUES ('trojan@usc.edu', 'taylor@usc.edu', 'hello');
 
