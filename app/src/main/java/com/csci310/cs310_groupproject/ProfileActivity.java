@@ -13,6 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.csci310.models.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,21 +23,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ProfileActivity extends AppCompatActivity {
-    String email = "";
-    String fname = "";
-    String lname = "";
-    String studyYear = "";
-    String major = "";
+    User user = new User();
     int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Intent data = getIntent();
-        email = data.getStringExtra("email");
+        user.email = data.getStringExtra("email");
 
         TextView emailProfileTextView = findViewById(R.id.emailProfileTextView);
-        emailProfileTextView.setText(email);
+        emailProfileTextView.setText(user.email);
         GetUserInfo connectMySql = new GetUserInfo();
         connectMySql.execute("");
     }
@@ -43,13 +41,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void updateInfo(View view) {
         EditText firstNameEditText = (EditText)findViewById(R.id.firstNameEditText);
-        fname = firstNameEditText.getText().toString();
+        user.fname = firstNameEditText.getText().toString();
         EditText lastNameEditText = (EditText)findViewById(R.id.lastNameEditText);
-        lname = lastNameEditText.getText().toString();
+        user.lname = lastNameEditText.getText().toString();
         EditText majorEditText = (EditText)findViewById(R.id.majorEditText);
-        major = majorEditText.getText().toString();
+        user.major = majorEditText.getText().toString();
         EditText studyYearEditText = (EditText)findViewById(R.id.studyYearEditText);
-        studyYear = studyYearEditText.getText().toString();
+        user.studyYear = studyYearEditText.getText().toString();
         UpdateUserInfo connectMySql = new UpdateUserInfo();
         connectMySql.execute("");
         //dismiss keyboard
@@ -61,13 +59,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void goToEventHistory(View view) {
         Intent i = new Intent(ProfileActivity.this, EventHistory.class);
-        i.putExtra("email",email);
+        i.putExtra("email",user.email);
         startActivity(i);
     }
 
     public void goToViewActivity(View view) {
         Intent intent = new Intent(ProfileActivity.this, ViewActivity.class);
-        intent.putExtra("email", email);
+        intent.putExtra("email", user.email);
         startActivity(intent);
     }
 
@@ -88,10 +86,10 @@ public class ProfileActivity extends AppCompatActivity {
                 } else {
                     Log.d("DATACONNECT", "connected");
                     PreparedStatement ps = conn.prepareStatement("Update Users Set Fname = ?, Lname = ?, studyYear = ?, major = ? where id = ?;");
-                    ps.setString(1, fname);
-                    ps.setString(2, lname);
-                    ps.setString(3, studyYear);
-                    ps.setString(4, major);
+                    ps.setString(1, user.fname);
+                    ps.setString(2, user.lname);
+                    ps.setString(3, user.studyYear);
+                    ps.setString(4, user.major);
                     ps.setInt(5, userId);
                     int count = ps.executeUpdate();
                     if (count > 0) {
@@ -140,19 +138,16 @@ public class ProfileActivity extends AppCompatActivity {
                     msg = "failed";
                 } else {
                     Log.d("DATACONNECT", "connected");
-                    String query = "Select * from Users where email = " + "'" + email + "'";
-
+                    String query = user.getUserSQL(user.email);
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
                     while (rs.next()) {
                         userId = rs.getInt("id");
                         System.out.println(userId);
-                        fname = rs.getString("Fname");
-                        lname = rs.getString("Lname");
-                        studyYear = rs.getString("studyYear");
-                        major = rs.getString("major");
-                        System.out.println ("fname = " + fname);
-                        System.out.println ("lname = " + lname);
+                        user.fname = rs.getString("Fname");
+                        user.lname = rs.getString("Lname");
+                        user.studyYear = rs.getString("studyYear");
+                        user.major = rs.getString("major");
                         return "success";
                     }
                 }
@@ -169,16 +164,16 @@ public class ProfileActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             EditText firstNameEditText = (EditText)findViewById(R.id.firstNameEditText);
-            firstNameEditText.setText(fname);
+            firstNameEditText.setText(user.fname);
 
             EditText lastNameEditText = (EditText)findViewById(R.id.lastNameEditText);
-            lastNameEditText.setText(lname);
+            lastNameEditText.setText(user.lname);
 
             EditText majorEditText = (EditText)findViewById(R.id.majorEditText);
-            majorEditText.setText(major);
+            majorEditText.setText(user.major);
 
             EditText studyYearEditText = (EditText)findViewById(R.id.studyYearEditText);
-            studyYearEditText.setText(studyYear);
+            studyYearEditText.setText(user.studyYear);
 
         }
     }

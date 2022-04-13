@@ -4,17 +4,18 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class User {
+    public String email;
     private int id;
-    String email; //userid
     private String password;
     String photoFilename;
-    String firstName;
-    String lastName;
-    String major;
-    String studyYear;
+    public String fname;
+    public String lname;
+    public String major;
+    public String studyYear;
 
-    public int getID() {
-        return id;
+    public String getUserSQL(String emailId) {
+        String query = "Select * from Users where email = " + "'" + emailId + "'";
+        return query;
     }
 
     public void userSignUp() {

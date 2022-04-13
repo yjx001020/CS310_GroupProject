@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 
 import com.csci310.models.Event;
 import com.csci310.models.Invitation;
+import com.csci310.models.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -77,8 +78,8 @@ public class EditEvent extends AppCompatActivity
                     msg = "failed";
                 } else {
                     Log.d("DATACONNECT", "connected");
-                    String query = "Select * from Users where email = " + "'" + email + "'";
-
+                    User user = new User();
+                    String query = user.getUserSQL(email);
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
                     while (rs.next()) {
