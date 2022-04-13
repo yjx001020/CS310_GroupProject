@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
 
+import com.csci310.models.Event;
 import com.csci310.models.Invitation;
 
 import java.sql.Connection;
@@ -30,10 +31,10 @@ public class EventHistory extends AppCompatActivity {
     private ArrayList<ArrayList<String>> Invitations = new ArrayList<>();
     private ArrayList<ArrayList<String>> History = new ArrayList<>();
     private ArrayList<ArrayList<String>> OwnEvent = new ArrayList<>();
-    private Button AcceptButton;
-    private Button DeclineButton;
-    private Button EditButton;
-    private Button WithdrawButton;
+    private ArrayList<Button> acceptButtons = new ArrayList<>();
+    private ArrayList<Button> declineButtons = new ArrayList<>();
+    private ArrayList<Button> withdrawButtons = new ArrayList<>();
+    private ArrayList<Button> editButtons = new ArrayList<>();
     private Button NotificationButton;
     private int mIndex;
 
@@ -49,14 +50,6 @@ public class EventHistory extends AppCompatActivity {
         PrintEvent mysql = new PrintEvent();
         mysql.execute("");
         BackHome = (Button) findViewById(R.id.History_to_home_button);
-        AcceptButton = new Button(EventHistory.this);
-        AcceptButton.setText("Accept");
-        DeclineButton= new Button(EventHistory.this);
-        DeclineButton.setText("Decline");
-        EditButton = new Button(EventHistory.this);
-        EditButton.setText("Edit");
-        WithdrawButton = new Button(EventHistory.this);
-        WithdrawButton.setText("Withdraw");
         NotificationButton = findViewById(R.id.Notification);
         NotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,37 +68,6 @@ public class EventHistory extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        AcceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AcceptInvitation accept = new AcceptInvitation();
-                accept.execute();
-            }
-        });
-
-        DeclineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DeclineInvitation decline = new DeclineInvitation();
-                decline.execute();
-            }
-        });
-
-        EditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditOwnEvent edit = new EditOwnEvent();
-                edit.execute();
-            }
-        });
-
-        WithdrawButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                WithdrawEvent withdraw = new WithdrawEvent();
-                withdraw.execute();
-            }
-        });
 
 
     }//end onCreate
@@ -118,32 +80,34 @@ public class EventHistory extends AppCompatActivity {
 
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password="+ MainActivity.PASSWORD);
+                conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password=" + MainActivity.PASSWORD);
                 if (conn == null) {
 
                 } else {
                     PreparedStatement st = conn.prepareStatement("select * from Invitation left join Event on Invitation.eventID = Event.eventID where acceptStatus !=2 and userID =?");
-                    st.setString(1,user_id);
+                    st.setString(1, user_id);
                     ResultSet rs = st.executeQuery();
                     while (rs.next()) {
                         String userID = rs.getString("userID");
                         int event_id = rs.getInt("eventID");
                         String invitation_id = rs.getString("invitationID");
-                        System.out.println(invitation_id);
-                        String accept_status = rs.getString("acceptStatus");
+                        int accept_status = rs.getInt("acceptStatus");
                         String description = rs.getString("Event.description");
                         String owner = rs.getString("Event.ownerEmail");
-                        int acceptStatus = Integer.parseInt(accept_status);
-                        if(acceptStatus == 1 && !userID.equals(owner)){
-                            ArrayList<String> temp = new ArrayList<>();
-                            temp.add(userID);
-                            temp.add(Integer.toString(event_id));
-                            temp.add(invitation_id);
-                            temp.add(description);
-                            temp.add(owner);
-                            History.add(temp);
-                        }
-                        else {
+                        System.out.println("user: "+ user_id);
+                        System.out.println("owner: "+ owner);
+                        String acceptStatus = String.valueOf(accept_status);
+                        if (accept_status == 1) {
+                            if(user_id != owner){
+                                ArrayList<String> temp = new ArrayList<>();
+                                temp.add(userID);
+                                temp.add(Integer.toString(event_id));
+                                temp.add(invitation_id);
+                                temp.add(description);
+                                temp.add(owner);
+                                History.add(temp);
+                            }
+                        } else if(accept_status == 0){
                             ArrayList<String> temp = new ArrayList<>();
                             temp.add(userID);
                             temp.add(Integer.toString(event_id));
@@ -156,9 +120,9 @@ public class EventHistory extends AppCompatActivity {
 
                     //fine events created by the user.
                     st = conn.prepareStatement("select * from Event where ownerEmail = ?");
-                    st.setString(1,user_id);
+                    st.setString(1, user_id);
                     ResultSet result = st.executeQuery();
-                    while(result.next()){
+                    while (result.next()) {
                         String ownerID = result.getString("ownerEmail");
                         int eventID = result.getInt("eventID");
                         String description = result.getString("description");
@@ -170,7 +134,6 @@ public class EventHistory extends AppCompatActivity {
                     }
 
 
-
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -178,30 +141,38 @@ public class EventHistory extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     LinearLayout list = findViewById(R.id.HistoryList);
-                    LinearLayout buttons = new LinearLayout(EventHistory.this);
-                    buttons.setOrientation(LinearLayout.HORIZONTAL);
-                    buttons.addView((AcceptButton));
-                    buttons.addView((DeclineButton));
-                    buttons.addView((EditButton));
-                    buttons.addView((WithdrawButton));
-                    list.addView(buttons);
-                    for(int i = 0;i<History.size();i++){
+                    LinearLayout buffer = new LinearLayout(EventHistory.this);
+                    buffer.setOrientation(LinearLayout.HORIZONTAL);
+                    TextView bufferText = new TextView(EventHistory.this);
+                    bufferText.setText("           \n");
+                    buffer.addView(bufferText);
+                    list.addView(buffer);
+                    for (int i = 0; i < History.size(); i++) {
                         LinearLayout event = new LinearLayout(EventHistory.this);
                         event.setOrientation(LinearLayout.HORIZONTAL);
                         TextView tx = new TextView(EventHistory.this);
-                        tx.setText(" (Withdraw)Event: " + History.get(i).get(3));
+                        tx.setText("    (Withdraw)Event: " + History.get(i).get(3));
                         int index = i;
+                        Button withdraw = new Button(EventHistory.this);
+                        withdraw.setText("Withdraw");
+                        withdraw.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                event_id = History.get(index).get(1);
+                                mIndex = index;
+                                WithdrawEvent withdraw_event = new WithdrawEvent();
+                                withdraw_event.execute();
+//                                LinearLayout temp = findViewById(R.id.HistoryList);
+//                                temp.removeAllViewsInLayout();
+//                                PrintEvent print = new PrintEvent();
+//                                print.execute("");
+                            }
+                        });
+                        withdrawButtons.add(withdraw);
                         tx.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -210,34 +181,78 @@ public class EventHistory extends AppCompatActivity {
                             }
                         });
                         event.addView(tx);
+                        event.addView(withdraw);
                         list.addView(event);
                     }
 
 
-                    for(int i = 0; i< Invitations.size(); i++){
+                    for (int i = 0; i < Invitations.size(); i++) {
                         list = findViewById(R.id.HistoryList);
                         LinearLayout event = new LinearLayout(EventHistory.this);
                         event.setOrientation(LinearLayout.HORIZONTAL);
                         TextView tx = new TextView(EventHistory.this);
-                        tx.setText(" (Accept or Decline)Event: " + Invitations.get(i).get(3));//get event description
+                        tx.setText("    (Accept or Decline)Event: " + Invitations.get(i).get(3)+" ");//get event description
+                        Button accept = new Button(EventHistory.this);
+                        Button decline = new Button(EventHistory.this);
+                        accept.setText("Accept");
+                        decline.setText("Decline");
                         int index = i;
+                        accept.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                event_id = Invitations.get(index).get(1);
+                                AcceptInvitation accept_invitation = new AcceptInvitation();
+                                accept_invitation.execute();
+//                                LinearLayout temp = findViewById(R.id.HistoryList);
+//                                temp.removeView(event);
+                            }
+                        });
+
+                        decline.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                event_id = Invitations.get(index).get(1);
+                                DeclineInvitation decline_invitation = new DeclineInvitation();
+                                decline_invitation.execute();
+//                                LinearLayout temp = findViewById(R.id.HistoryList);
+//                                temp.removeAllViewsInLayout();
+//                                PrintEvent print = new PrintEvent();
+//                                print.execute("");
+                            }
+                        });
                         tx.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 event_id = Invitations.get(index).get(1);
                             }
                         });
+                        acceptButtons.add(accept);
+                        declineButtons.add(decline);
                         event.addView(tx);
+                        event.addView(accept);
+                        event.addView(decline);
                         list.addView(event);
                     }
 
-                    for(int i = 0;i<OwnEvent.size();i++){
+                    for (int i = 0; i < OwnEvent.size(); i++) {
                         list = findViewById(R.id.HistoryList);
                         LinearLayout event = new LinearLayout(EventHistory.this);
                         event.setOrientation(LinearLayout.HORIZONTAL);
                         TextView tx = new TextView(EventHistory.this);
-                        tx.setText(" (Edit)Event: " + OwnEvent.get(i).get(1));//get description
+                        tx.setText("       (Edit)Event: " + OwnEvent.get(i).get(1));//get description
                         int index = i;
+                        Button edit = new Button (EventHistory.this);
+                        edit.setText("Edit");
+                        edit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                event_id = OwnEvent.get(index).get(1);
+                                EditOwnEvent edit_own = new EditOwnEvent();
+                                edit_own.execute();
+                                PrintEvent print = new PrintEvent();
+                                print.execute("");
+                            }
+                        });
                         tx.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -245,19 +260,26 @@ public class EventHistory extends AppCompatActivity {
                             }
                         });
                         event.addView(tx);
-
+                        event.addView(edit);
                         list.addView(event);
                     }
 
                 }
             });
 
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+
+
         }
 
     }
-
-
-
+    
     public class AcceptInvitation extends AsyncTask<String, Void, String> {
 
 

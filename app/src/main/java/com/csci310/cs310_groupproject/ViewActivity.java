@@ -49,7 +49,7 @@ public class ViewActivity extends AppCompatActivity {
     private String useremail;
     private String tt = "public";
     static TextView tx1;
-    static List<Date> at = new ArrayList<>();
+    List<Date> at = new ArrayList<>();
     static long di;
     private Button btnprofile;
     Connection conn = null;
@@ -267,6 +267,7 @@ public class ViewActivity extends AppCompatActivity {
                 Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password=" + MainActivity.PASSWORD);
                 String result = "Database Connection Successful\n";
+//                MakeConnection(conn);
 
                 if (conn == null) {
                 } else {
@@ -321,8 +322,19 @@ public class ViewActivity extends AppCompatActivity {
         }
         return at.get(index);
     }
-    static TextView gettv(){
-        return tx1;
-    }
+//    static String MakeConnection(Connection conn){
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password=" + MainActivity.PASSWORD);
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        String result = "Database Connection Successful\n";
+//        return result;
+//    }
 
 }

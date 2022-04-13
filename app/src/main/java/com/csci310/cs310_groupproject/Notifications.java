@@ -18,6 +18,7 @@ public class Notifications extends AppCompatActivity {
     private ArrayList<String> notifications;
     private Button BackButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,13 @@ public class Notifications extends AppCompatActivity {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password="+ MainActivity.PASSWORD);
+                PreparedStatement st = conn.prepareStatement("select * from Notification where email =?");
+                st.setString(1, user_id);
+                ResultSet rs = st.executeQuery();
+                while (rs.next()) {
+                    String msg = rs.getString("message");
+                    notifications.add(msg);
+                }
             } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
             }
