@@ -40,6 +40,7 @@ public class ViewActivity extends AppCompatActivity {
     private Button btnsign;
     private Button btnmap;
     private Button btncreate;
+    private TextView reject;
     SimpleAdapter ADAhere;
     private Map<Integer, String> eventdetail;
     TextView textView;
@@ -75,6 +76,7 @@ public class ViewActivity extends AppCompatActivity {
         btncreate = (Button) findViewById(R.id.create);
         btnprofile = (Button) findViewById(R.id.backtoprofile);
         listview = (ListView) findViewById(R.id.eventlist);
+        reject = (TextView) findViewById(R.id.reject);
         InfoAsyncTask connectMySql = new InfoAsyncTask();
         connectMySql.execute("");
 
@@ -122,7 +124,11 @@ public class ViewActivity extends AppCompatActivity {
         btnsign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openNewActivity();
+                if(di > 0) {
+                    openNewActivity();
+                }else{
+                    reject.setText("PAST!!");
+                }
             }
         });
         btnmap.setOnClickListener(new View.OnClickListener() {
@@ -322,19 +328,5 @@ public class ViewActivity extends AppCompatActivity {
         }
         return at.get(index);
     }
-//    static String MakeConnection(Connection conn){
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password=" + MainActivity.PASSWORD);
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        String result = "Database Connection Successful\n";
-//        return result;
-//    }
 
 }

@@ -38,13 +38,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class SignupActivityTest {
+public class SignupActivityTest2 {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void signupActivityTest() {
+    public void signupActivityTest2() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.signin), withText("Sign In"),
                         childAtPosition(
@@ -63,7 +63,7 @@ public class SignupActivityTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("tommy@usc.edu"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("taylor@usc.edu"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.editTextTextPassword),
@@ -73,7 +73,7 @@ public class SignupActivityTest {
                                         0),
                                 1),
                         isDisplayed()));
-        appCompatEditText2.perform(replaceText("tommy"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("hello123"), closeSoftKeyboard());
 
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.buttonlog), withText("Log In"),
@@ -100,7 +100,7 @@ public class SignupActivityTest {
                         childAtPosition(
                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                 3)))
-                .atPosition(1);
+                .atPosition(3);
         constraintLayout.perform(click());
 
         ViewInteraction materialButton4 = onView(
@@ -114,10 +114,10 @@ public class SignupActivityTest {
         materialButton4.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.textView5), withText("EventID: 2"),
+                allOf(withId(R.id.textView5), withText("EventID: 6"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView.check(matches(withText("EventID: 2")));
+        textView.check(matches(withText("EventID: 6")));
 
         ViewInteraction textView2 = onView(
                 allOf(withId(R.id.textView6), withText("Type: public"),
@@ -138,16 +138,16 @@ public class SignupActivityTest {
         textView4.check(matches(withText("EventType: study group")));
 
         ViewInteraction textView5 = onView(
-                allOf(withId(R.id.textView9), withText("Time: 2022-02-10 16:00:00.0"),
+                allOf(withId(R.id.textView9), withText("Time: 2022-04-13 13:52:00.0"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView5.check(matches(withText("Time: 2022-02-10 16:00:00.0")));
+        textView5.check(matches(withText("Time: 2022-04-13 13:52:00.0")));
 
         ViewInteraction textView6 = onView(
-                allOf(withId(R.id.textView9), withText("Time: 2022-02-10 16:00:00.0"),
+                allOf(withId(R.id.textView9), withText("Time: 2022-04-13 13:52:00.0"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView6.check(matches(withText("Time: 2022-02-10 16:00:00.0")));
+        textView6.check(matches(withText("Time: 2022-04-13 13:52:00.0")));
 
         ViewInteraction appCompatSpinner = onView(
                 allOf(withId(R.id.spinner),
@@ -160,23 +160,27 @@ public class SignupActivityTest {
         appCompatSpinner.perform(click());
 
         ViewInteraction textView7 = onView(
-                allOf(withText("2022-02-10 16:00:00.0"),
+                allOf(withText("2022-04-13 13:52:00.0"),
                         withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))),
                         isDisplayed()));
-        textView7.check(matches(withText("2022-02-10 16:00:00.0")));
+        textView7.check(matches(withText("2022-04-13 13:52:00.0")));
 
-        ViewInteraction textView8 = onView(
-                allOf(withText("2022-02-10 14:00:00.0"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))),
+        DataInteraction materialTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(0);
+        materialTextView.perform(click());
+
+        ViewInteraction materialButton5 = onView(
+                allOf(withId(R.id.button2), withText("Submit"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
                         isDisplayed()));
-        textView8.check(matches(withText("2022-02-10 14:00:00.0")));
-
-        ViewInteraction textView9 = onView(
-                allOf(withText("2022-02-10 14:00:00.0"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))),
-                        isDisplayed()));
-        textView9.check(matches(withText("2022-02-10 14:00:00.0")));
-
+        materialButton5.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

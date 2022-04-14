@@ -37,13 +37,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class ViewActivityTest4 {
+public class ViewActivityTest5 {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void viewActivityTest4() {
+    public void viewActivityTest5() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.signin), withText("Sign In"),
                         childAtPosition(
@@ -106,12 +106,6 @@ public class ViewActivityTest4 {
                         isDisplayed()));
         button2.check(matches(isDisplayed()));
 
-        ViewInteraction listView = onView(
-                allOf(withId(R.id.eventlist),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        listView.check(matches(isDisplayed()));
-
         ViewInteraction textView = onView(
                 allOf(withId(R.id.textView4), withText("Event:1, Click to View Details"),
                         withParent(allOf(withId(R.id.listelement),
@@ -132,6 +126,19 @@ public class ViewActivityTest4 {
                                 withParent(withId(R.id.eventlist)))),
                         isDisplayed()));
         textView3.check(matches(withText("Event:5, Click to View Details")));
+
+        ViewInteraction textView4 = onView(
+                allOf(withId(R.id.textView4), withText("Event:6, Click to View Details"),
+                        withParent(allOf(withId(R.id.listelement),
+                                withParent(withId(R.id.eventlist)))),
+                        isDisplayed()));
+        textView4.check(matches(withText("Event:6, Click to View Details")));
+
+        ViewInteraction textView5 = onView(
+                allOf(withId(R.id.detail), withText("Activity Details...To be Displayed..."),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        textView5.check(matches(withText("Activity Details...To be Displayed...")));
 
         ViewInteraction button3 = onView(
                 allOf(withId(R.id.create), withText("CREATE EVENT"),
@@ -156,32 +163,6 @@ public class ViewActivityTest4 {
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
         button6.check(matches(isDisplayed()));
-
-        DataInteraction constraintLayout = onData(anything())
-                .inAdapterView(allOf(withId(R.id.eventlist),
-                        childAtPosition(
-                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                3)))
-                .atPosition(0);
-        constraintLayout.perform(click());
-
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.detail), withText("Access Type: public\nLocation: 32,117\nEvent Type: social event\nTime: 2022-03-01 16:00:00.0\nOwnerID: taylor@usc.edu"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView4.check(matches(withText("Access Type: public\nLocation: 32,117\nEvent Type: social event\nTime: 2022-03-01 16:00:00.0\nOwnerID: taylor@usc.edu")));
-
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.timedecided), withText("2022-02-20"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView5.check(matches(withText("2022-02-20")));
-
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.timedecided), withText("2022-02-20"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView6.check(matches(withText("2022-02-20")));
     }
 
     private static Matcher<View> childAtPosition(

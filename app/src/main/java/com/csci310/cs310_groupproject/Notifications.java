@@ -72,6 +72,10 @@ public class Notifications extends AppCompatActivity {
                             tx.setText(notifications.get(i));
                             list.addView(tx);
                         }
+                    }else{
+                        TextView tx = new TextView(Notifications.this);
+                        tx.setText("don't have one");
+                        list.addView(tx);
                     }
 
                 }

@@ -63,7 +63,7 @@ public class SignupActivityGetNotifyTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("trojan@usc.edu"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("tommy@usc.edu"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.editTextTextPassword),
@@ -73,7 +73,7 @@ public class SignupActivityGetNotifyTest {
                                         0),
                                 1),
                         isDisplayed()));
-        appCompatEditText2.perform(replaceText("123456hi"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("tommy"), closeSoftKeyboard());
 
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.buttonlog), withText("Log In"),
