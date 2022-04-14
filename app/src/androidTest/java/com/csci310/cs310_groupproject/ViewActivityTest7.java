@@ -67,4 +67,18 @@ public class ViewActivityTest7 {
             fail("Unexpected exception type");
         }
     }
+    @Test
+    public void testCreateDateNoEvent2() throws Exception {
+        doReturn(pst).when(conn).prepareStatement(any());
+        String[] invitees = new String[] { "a", "b" };
+        ViewActivity view = new ViewActivity();
+
+        String[] events = new String[] {};
+        try {
+            view.Callgetmode(conn, "100");
+            fail("Expected throw");
+        } catch (Exception e) {
+            fail("Unexpected exception type");
+        }
+    }
 }
