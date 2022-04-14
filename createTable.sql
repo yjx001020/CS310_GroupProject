@@ -75,3 +75,4 @@ ADD PRIMARY KEY (`id`);
 INSERT INTO `CS310Project`.`Notification` (`email`, `owner`, `message`) VALUES ('trojan@usc.edu', 'taylor@usc.edu', 'hello');
 INSERT INTO `CS310Project`.`Invitation` (`InvitationID`, `userID`, `eventID`, `acceptStatus`) VALUES ('7', 'trojan@usc.edu', '1', '0');
 UPDATE `CS310Project`.`Invitation` SET `eventID` = '2' WHERE (`InvitationID` = '7');
+DELETE FROM `CS310Project`.`Invitation` WHERE (`InvitationID` = '7');
