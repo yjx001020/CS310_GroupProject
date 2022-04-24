@@ -26,7 +26,7 @@ CREATE TABLE Users(
     UserPassword VARCHAR(50) NOT NULL,
     Fname VARCHAR(50)NULL,
     Lname VARCHAR(50)NULL,
-    photoFileName VARCHAR(150) NULL,
+    photoFileName VARCHAR(1024) NULL,
     major VARCHAR(150) NULL,
     studyYear VARCHAR(50)NULL
   );

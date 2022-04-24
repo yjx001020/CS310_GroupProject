@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.csci310.models.User;
@@ -21,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import android.content.ContentResolver;
 
 public class ProfileActivity extends AppCompatActivity {
     User user = new User();
@@ -38,6 +41,36 @@ public class ProfileActivity extends AppCompatActivity {
         connectMySql.execute("");
     }
 
+    public void imageChooser(View view) {
+        // create an instance of the intent of the type image
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        // pass the constant to compare it with the returned requestCode
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), 200);
+    }
+
+    // this function is triggered when user selects the image from the imageChooser
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            // compare the resultCode with the SELECT_PICTURE constant
+            if (requestCode == 200) {
+                // Get the url of the image from data
+                Uri selectedImageUri = data.getData();
+                System.out.println(selectedImageUri);
+
+                if (null != selectedImageUri) {
+                    // update the preview image in the layout
+                    ImageView IVPreviewImage = findViewById(R.id.imageView);
+                    IVPreviewImage.setImageURI(selectedImageUri);
+                    user.photoFilename = selectedImageUri.toString();
+                    UpdatePhoto connectMySql = new UpdatePhoto();
+                    connectMySql.execute("");
+                }
+            }
+        }
+    }
 
     public void updateInfo(View view) {
         EditText firstNameEditText = (EditText)findViewById(R.id.firstNameEditText);
@@ -127,6 +160,38 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    public class UpdatePhoto extends AsyncTask<String, Void, String> {
+        String msg = "";
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/CS310Project?user=root&password="  + MainActivity.PASSWORD);
+                if (conn == null) {
+                    msg = "failed";
+                } else {
+                    Log.d("DATACONNECT", "connected");
+                    System.out.println(user.photoFilename.length());
+                    PreparedStatement ps = conn.prepareStatement("Update Users Set photoFileName = ? where id = ?;");
+                    ps.setString(1, user.photoFilename);
+                    ps.setInt(2, userId);
+                    int count = ps.executeUpdate();
+                    if (count > 0) {
+                        System.out.println("update user photo success");
+                        msg = "success";
+                    } else {
+                        System.out.println("update user photo failed");
+                    }
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return msg;
+        }
+    }
+
     public class GetUserInfo extends AsyncTask<String, Void, String> {
         String msg = "";
         @Override
@@ -148,6 +213,7 @@ public class ProfileActivity extends AppCompatActivity {
                         user.lname = rs.getString("Lname");
                         user.studyYear = rs.getString("studyYear");
                         user.major = rs.getString("major");
+                        user.photoFilename = rs.getString("photoFileName");
                         return "success";
                     }
                 }
@@ -175,6 +241,10 @@ public class ProfileActivity extends AppCompatActivity {
             EditText studyYearEditText = (EditText)findViewById(R.id.studyYearEditText);
             studyYearEditText.setText(user.studyYear);
 
+            if (null != user.photoFilename) {
+                ImageView IVPreviewImage = findViewById(R.id.imageView);
+                IVPreviewImage.setImageURI(Uri.parse(user.photoFilename));
+            }
         }
     }
 }

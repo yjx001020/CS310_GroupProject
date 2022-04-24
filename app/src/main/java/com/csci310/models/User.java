@@ -7,7 +7,7 @@ public class User {
     public String email;
     private int id;
     private String password;
-    String photoFilename;
+    public String photoFilename;
     public String fname;
     public String lname;
     public String major;
