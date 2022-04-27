@@ -48,9 +48,9 @@ Insert into Users (email, UserPassword, Fname, Lname, major, studyYear) values (
 Insert into Users (email, UserPassword, Fname, Lname, major, studyYear) values ('taylor@usc.edu', 'hello123','Taylor', 'Swift', 'Music', 'Senior');
 Insert into Users (email, UserPassword, Fname, Lname) values ('tony@usc.edu', 'hello123','Tony', 'Liang');
 
-Insert into CS310Project.Event (accessType, location, description, eventType, dueTime, timeDecided, ownerEmail) values ('public', '32,117', 'ice cream social', 'social event', '2022-03-01\t16:00:00', null, 'taylor@usc.edu');
-Insert into CS310Project.Event (accessType, location, description, eventType, dueTime, timeDecided, ownerEmail) values ('public', '34,118', 'study for CSCI 310 midterm', 'study group', '2022-03-28\t13:00:00', null, 'trojan@usc.edu');
-Insert into CS310Project.Event (accessType, location, description, eventType, dueTime, timeDecided, ownerEmail) values ('private', '32,117', 'football training', 'sports event', '2022-04-01\t00:00:00', null, 'trojan@usc.edu');
+Insert into CS310Project.Event (accessType, location, description, eventType, dueTime, timeDecided, ownerEmail) values ('public', 'USC lat/lng: (34.020922,-118.290117)', 'ice cream social', 'social event', '2022-03-01\t16:00:00', null, 'taylor@usc.edu');
+Insert into CS310Project.Event (accessType, location, description, eventType, dueTime, timeDecided, ownerEmail) values ('public', 'USC lat/lng: (34.020922,-118.290117)', 'study for CSCI 310 midterm', 'study group', '2022-03-28\t13:00:00', null, 'trojan@usc.edu');
+Insert into CS310Project.Event (accessType, location, description, eventType, dueTime, timeDecided, ownerEmail) values ('private', 'USC lat/lng: (34.020922,-118.290117)', 'football training', 'sports event', '2022-04-01\t00:00:00', null, 'trojan@usc.edu');
 
 Insert into CS310Project.Invitation (userID, eventID, acceptStatus) values ('taylor@usc.edu', 1, 0);
 Insert into CS310Project.Invitation (userID, eventID, acceptStatus) values ('tony@usc.edu', 1, 1);
