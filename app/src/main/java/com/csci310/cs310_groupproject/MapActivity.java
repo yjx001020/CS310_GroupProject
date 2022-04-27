@@ -22,6 +22,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Connection;
@@ -35,9 +36,10 @@ import java.util.List;
 
 
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarkerClickListener,OnMapReadyCallback {
     private String[] loc;
     private Button goback;
+    private String info;
     String email = "";
     List<LatLng> all = new ArrayList<>();
     static String newinput;
@@ -50,6 +52,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         tw = findViewById(R.id.textView12);
         String temp = data.getStringExtra("coord");
         email = data.getStringExtra("email");
+        info = data.getStringExtra("info");
         System.out.println(temp);
 //        loc = temp.split(";");
         all = processingloc(temp);
@@ -74,7 +77,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     .title("Event in Map"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(all.get(i)));
         }
+        googleMap.setOnMarkerClickListener(this);
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(getBaseContext(), marker.getTitle() +
+                " has been clicked ", Toast.LENGTH_LONG).show();
+        tw.setText(info);
+        return false;
+    }
+
     static public List<LatLng> processingloc(String ss){
         String [] tloc;
         if(ss != null){

@@ -177,6 +177,7 @@ public class ViewActivity extends AppCompatActivity {
         System.out.println(allcoord);
         intent.putExtra("coord", allcoord);
         intent.putExtra("email", useremail);
+        intent.putExtra("info", information);
 
         startActivity(intent);
     }

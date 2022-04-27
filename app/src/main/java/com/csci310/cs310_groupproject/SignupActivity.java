@@ -35,9 +35,12 @@ public class SignupActivity extends AppCompatActivity {
     private Button btnren;
     private String timeslot;
     private ArrayList<String> times;
+    private ArrayList<String> addtimes = new ArrayList<>();
     private Spinner mySpinner;
     private String ddate;
+    private String addate = "";
     private String userid;
+    int cou = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,9 +67,17 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                ddate = mySpinner.getSelectedItem().toString();
                 textView5 = (TextView) findViewById(R.id.textView9);
-                textView5.setText("Time: " + ddate);
+                if(cou == 0){
+                    textView5.setText("Time: not selected yet");
+                }else{
+                    ddate = mySpinner.getSelectedItem().toString();
+                    addtimes.add(ddate);
+                    addate += ddate + '\n';
+                    textView5.setText("Time: "  + addate);
+                }
+                cou++;
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -163,11 +174,15 @@ public class SignupActivity extends AppCompatActivity {
                         System.out.println(invitationID);
                     }
                     PreparedStatement ps = null;
-                    ps = conn.prepareStatement("Insert into CS310Project.Timeslots (InvitationID, timeslots, chosen, eventID) values (?, ?, ?, ?);");
-                    ps.setInt(1, invitationID);
-                    ps.setString(2, ddate);
-                    ps.setInt(3, 1);
-                    ps.setInt(4, Integer.parseInt(idd));
+                    for(int i= 0; i < addtimes.size(); i++){
+                        ps = conn.prepareStatement("Insert into CS310Project.Timeslots (InvitationID, timeslots, chosen, eventID) values (?, ?, ?, ?);");
+                        ps.setInt(1, invitationID);
+                        ps.setString(2, addtimes.get(i));
+                        ps.setInt(3, 1);
+                        ps.setInt(4, Integer.parseInt(idd));
+                        ps.executeUpdate();
+                    }
+
                     int count = ps.executeUpdate();
                     if (count > 0) {
                         System.out.println("insert timeslot success");

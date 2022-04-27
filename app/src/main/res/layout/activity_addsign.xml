@@ -9,7 +9,7 @@
         android:id="@+id/spinner"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="300dp"
+        android:layout_marginBottom="270dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Time"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginStart="50dp"
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
         app:layout_constraintLeft_toLeftOf="parent" />
