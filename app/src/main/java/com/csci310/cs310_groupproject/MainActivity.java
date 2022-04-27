@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private Button mSignUpButton,mLogInButton;
-    static public String PASSWORD = "vincent0124!";
+    static public String PASSWORD = ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
