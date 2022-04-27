@@ -1,5 +1,8 @@
 package com.csci310.cs310_groupproject;
 
+import static com.csci310.cs310_groupproject.BuildConfig.MAPS_API_KEY;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -23,6 +26,12 @@ import android.widget.TimePicker;
 import com.csci310.models.Event;
 import com.csci310.models.Invitation;
 import com.csci310.models.User;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,6 +39,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -63,6 +73,32 @@ public class EditEvent extends AppCompatActivity
         Bundle bundle = data.getExtras();
         ownerId = bundle.getString("ownerID");
         event_id = bundle.getInt("eventID");
+        // Initialize the SDK
+        Places.initialize(getApplicationContext(), MAPS_API_KEY);
+
+        // Create a new PlacesClient instance
+        PlacesClient placesClient = Places.createClient(this);
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                locationSubmit = place.getName() + "\t" + place.getLatLng();
+                System.out.println(locationSubmit);
+            }
+
+
+            @Override
+            public void onError(@NonNull Status status) {
+                System.out.println("An error occurred: " + status);
+            }
+        });
     }
 
 
@@ -276,12 +312,6 @@ public class EditEvent extends AppCompatActivity
             accessTypeSubmit = "private";
         }
 
-        EditText editTextLocation = (EditText)findViewById(R.id.editTextLocation);
-        locationSubmit = editTextLocation.getText().toString();
-        if (locationSubmit.isEmpty()) {
-            displayAlertIfEmpty("Location cannot be empty");
-            return;
-        }
 
         EditText editTextTextMultiLine = (EditText)findViewById(R.id.editTextTextMultiLine);
         descriptionSubmit = editTextTextMultiLine.getText().toString();
